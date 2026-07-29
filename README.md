@@ -1,172 +1,237 @@
-# oracle-oci-gnsys-project
+# 🚀 Project GnSys
+## Enterprise Oracle Cloud Infrastructure Learning Journey
 
-> **Enterprise-style Oracle Cloud Infrastructure learning journey**
+<p align="center">
 
 ![Oracle Cloud](https://img.shields.io/badge/Oracle-Cloud-red)
-![OCI](https://img.shields.io/badge/OCI-Foundations-orange)
-![Project Status](https://img.shields.io/badge/Status-In%20Progress-blue)
+![OCI](https://img.shields.io/badge/Learning-OCI%20Foundations-orange)
+![Progress](https://img.shields.io/badge/Progress-95%25-brightgreen)
+![Status](https://img.shields.io/badge/Status-Database%20Review-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
----
-
-# Welcome
-
-Welcome to **Project GnSyS**.
-
-This repository documents the complete design, implementation, and evolution of an Oracle Cloud Infrastructure (OCI) environment built from scratch following enterprise architecture principles.
-
-Unlike traditional certification repositories, Project GnSyS focuses on understanding **why** infrastructure is designed in a particular way—not simply **how** to deploy cloud resources.
-
-The goal is to build a reusable cloud architecture while developing practical OCI skills through hands-on laboratories, technical documentation, and architecture decision records.
+</p>
 
 ---
 
-# Project Objectives
+> **"Build first. Document always. Understand everything."**
 
-- Learn Oracle Cloud Infrastructure through hands-on practice.
-- Build an enterprise-style OCI environment.
-- Follow industry naming and tagging standards.
-- Document every architectural decision.
-- Prepare for Oracle OCI certifications.
-- Publish a professional cloud portfolio.
+Project **GnSys** is an enterprise-style Oracle Cloud Infrastructure learning repository documenting every lab, architectural decision, and lesson learned while progressing through the OCI Foundations learning path.
+
+Unlike repositories that simply collect notes, this project is organized as if it were documenting a real cloud deployment.
 
 ---
 
-# Learning Philosophy
+# 📑 Table of Contents
 
-Project GnSyS follows one simple principle:
-
-> **Build first. Document always. Understand everything.**
-
-Every resource created throughout this project has a defined purpose, documented design decisions, and follows a consistent architecture.
-
----
-
-# Repository Structure
-
-```
-oracle-oci-gnsys-project/
-
-│
-├── docs/
-│   ├── architecture/
-│   ├── standards/
-│   ├── decisions/
-│   └── roadmap/
-│
-├── labs/
-├── diagrams/
-├── screenshots/
-├── terraform/
-├── scripts/
-└── README.md
-```
+- Project Overview
+- Learning Dashboard
+- Architecture
+- Repository Structure
+- Completed Labs
+- Roadmap
+- Standards
+- ADRs
+- Screenshots
+- Learning Path
+- Future Work
 
 ---
 
-# Current Roadmap
+# 🎯 Project Objectives
 
-| Phase | Status |
-|---------|:------:|
-| Repository Initialization | ✅ |
-| Architecture Standards | 🔄 |
-| Compartments | ⏳ |
-| IAM | ⏳ |
-| Networking | ⏳ |
-| Compute | ⏳ |
-| Storage | ⏳ |
-| Database | ⏳ |
-| Security | ⏳ |
-| Monitoring | ⏳ |
-| Cost Management | ⏳ |
-| Final Architecture | ⏳ |
+- Learn OCI through hands-on implementation
+- Understand enterprise cloud architecture
+- Document every design decision
+- Build a professional cloud engineering portfolio
+- Prepare for OCI certifications
 
 ---
 
-# Naming Convention
+# 📊 Learning Dashboard
 
-Every OCI resource follows the Project GnSyS naming standard.
+```text
+Overall Progress
 
-Example:
-
-```
-VCN-GnSyS-01
-VM-GnSyS-WEB-01
-LB-GnSyS-PUBLIC-01
-OBJ-GnSyS-BACKUP-01
+█████████████████████████████░ 95%
 ```
 
-Complete documentation is available in:
-
-```
-docs/standards/Naming_Standard.md
-```
+| Domain | Progress |
+|--------------------------|:---:|
+| Governance & IAM | ✅ |
+| Networking | ✅ |
+| Compute | ✅ |
+| Storage | ✅ |
+| Database Services | 🟡 |
+| Monitoring | ✅ |
+| Cost Management | ✅ |
+| Documentation | ✅ |
+| Practice Exams | 🟡 |
+| Certification | ⏳ |
 
 ---
 
-# Long-Term Vision
+# 🏛️ High-Level Architecture
 
-Project GnSyS is intended to evolve beyond OCI Foundations.
+```text
+                     Internet
+                         │
+                 Internet Gateway
+                         │
+          ┌──────── Public Subnet ────────┐
+          │                               │
+     Oracle Linux VM                 Future LB
+          │
+     Apache Web Server
+          │
+      Object Storage
 
-Future milestones include:
+         VCN (Enterprise Design)
+```
 
-- Oracle OCI Architect Associate
-- Terraform
-- OCI DevOps
-- Oracle Kubernetes Engine (OKE)
-- High Availability
-- Disaster Recovery
-- CI/CD
-- Infrastructure as Code
-- Enterprise Architecture Patterns
+*A graphical architecture diagram will be maintained under `/diagrams`.*
 
 ---
 
-# Technology Stack
+# 📂 Repository Structure
 
-- Oracle Cloud Infrastructure (OCI)
-- Oracle Linux
-- Ubuntu Linux
-- Virtual Cloud Networks (VCN)
-- Compute Instances
-- Object Storage
-- Block Storage
-- IAM
-- Monitoring
-- Notifications
-- Terraform (future)
-- GitHub
+```text
+docs/
+ ├── architecture/
+ ├── decisions/
+ ├── roadmap/
+ ├── standards/
 
----
-
-# Repository Status
-
-Current Version
-
-```
-v0.1.0
-```
-
-Current Focus
-
-```
-OCI Foundations
-Architecture Standards
+labs/
+diagrams/
+screenshots/
+scripts/
+terraform/ (future)
 ```
 
 ---
 
-# Development Approach
+# 🧪 Completed Labs
 
-This repository follows a human-in-the-loop workflow.
-The project is designed, implemented, validated, and maintained by the author, with documentation and technical collaboration supported by ChatGPT (OpenAI).
+## Governance
+- ✅ Compartments
+- ✅ IAM Policies
+- ✅ Tags
 
-# Author
-Carlos Ramos Gomez 
+## Networking
+- ✅ VCN
+- ✅ Public Subnet
+- ✅ Internet Gateway
+- ✅ NAT Gateway
+- ✅ Service Gateway
+- ✅ Route Tables
+- ✅ Security Lists
+- ✅ Network Security Groups
+
+## Compute
+- ✅ Oracle Linux VM
+- ✅ SSH Authentication
+- ✅ Apache Deployment
+
+## Storage
+- ✅ Object Storage Fundamentals
+- ✅ Block Volume Fundamentals
+
+## Observability
+- ✅ Monitoring Overview
+- ✅ Notifications
+- ✅ Cost Management
+
+---
+
+# 🧭 Engineering Standards
+
+- Consistent naming convention
+- Tagging strategy
+- Documentation-first workflow
+- Architecture Decision Records (ADRs)
+- Reproducible labs
+
+---
+
+# 📝 Architecture Decision Records
+
+| ADR | Description | Status |
+|-----|-------------|:-----:|
+| ADR-0001 | Documentation First | ✅ |
+| ADR-0002 | Naming Standards | ✅ |
+| ADR-0003 | NSG over Security Lists | ✅ |
+
+---
+
+# 📸 Screenshots
+
+Each completed lab includes screenshots showing the deployed OCI resources.
+
+```
+screenshots/
+```
+
+---
+
+# 🛣️ Learning Roadmap
+
+## Phase 1 — OCI Foundations
+
+- ✅ Core Services
+- ✅ Networking
+- ✅ Compute
+- ✅ Storage
+- 🟡 Database Review
+- 🟡 Practice Exams
+- ⏳ Certification Exam
+
+## Phase 2 — OCI AI Foundations
+
+- ⏳ AI Services
+- ⏳ Generative AI
+- ⏳ Vector Search
+
+## Phase 3 — Professional OCI
+
+- ⏳ Terraform
+- ⏳ DevOps
+- ⏳ OKE
+- ⏳ High Availability
+- ⏳ Disaster Recovery
+
+---
+
+# 📚 References
+
+- Oracle Cloud Documentation
+- Oracle University
+- OCI Architecture Center
+
+---
+
+# 🤝 Contributing
+
+This repository is maintained as a personal learning and portfolio project.
+Suggestions and discussions are always welcome.
+
+---
+
+# 👨‍💻 Author
+
+**Carlos Ramos Gomez**
 
 Costa Rica
 
 ---
 
-# License
+# 🙏 Acknowledgements
+
+Technical implementation by the author.
+
+Documentation, reviews, study guidance, and architectural discussions were developed with assistance from ChatGPT (OpenAI).
+
+---
+
+# 📄 License
+
 MIT License

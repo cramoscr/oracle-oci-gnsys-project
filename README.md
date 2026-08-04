@@ -1,12 +1,13 @@
 # 🚀 Project GnSys
-## Enterprise Oracle Cloud Infrastructure Learning Journey
+## Building a Production-Style Oracle Cloud Application using OCI Always Free
 
 <p align="center">
 
 ![Oracle Cloud](https://img.shields.io/badge/Oracle-Cloud-red)
 ![OCI](https://img.shields.io/badge/Learning-OCI%20Foundations-orange)
-![Progress](https://img.shields.io/badge/Progress-95%25-brightgreen)
-![Status](https://img.shields.io/badge/Status-Database%20Review-blue)
+![Progress](https://img.shields.io/badge/Progress-98%25-brightgreen)
+![Application](https://img.shields.io/badge/Application-ONLINE-success)
+![Database](https://img.shields.io/badge/Database-Health%20Monitoring-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 </p>
@@ -15,9 +16,9 @@
 
 > **"Build first. Document always. Understand everything."**
 
-Project **GnSys** is an enterprise-style Oracle Cloud Infrastructure learning repository documenting every lab, architectural decision, and lesson learned while progressing through the OCI Foundations learning path.
+Project **GnSys** is an enterprise-style Oracle Cloud Infrastructure learning repository documenting every lab, architectural decision, and lesson learned while building a production-style cloud application from scratch using Oracle Cloud Infrastructure Always Free resources.
 
-Unlike repositories that simply collect notes, this project is organized as if it were documenting a real cloud deployment.
+Unlike repositories that simply collect notes, this project follows engineering practices used in real enterprise environments.
 
 ---
 
@@ -25,25 +26,25 @@ Unlike repositories that simply collect notes, this project is organized as if i
 
 - Project Overview
 - Learning Dashboard
-- Architecture
+- High-Level Architecture
 - Repository Structure
 - Completed Labs
-- Roadmap
-- Standards
-- ADRs
-- Screenshots
-- Learning Path
-- Future Work
+- Enterprise Features
+- Architecture Decision Records
+- Learning Roadmap
+- Future Enhancements
+- References
 
 ---
 
 # 🎯 Project Objectives
 
-- Learn OCI through hands-on implementation
-- Understand enterprise cloud architecture
-- Document every design decision
-- Build a professional cloud engineering portfolio
-- Prepare for OCI certifications
+- Learn Oracle Cloud Infrastructure through hands-on implementation
+- Build a complete cloud-hosted enterprise application
+- Understand enterprise architecture patterns
+- Document every engineering decision
+- Create a professional cloud engineering portfolio
+- Prepare for Oracle OCI certifications
 
 ---
 
@@ -52,43 +53,58 @@ Unlike repositories that simply collect notes, this project is organized as if i
 ```text
 Overall Progress
 
-█████████████████████████████░ 95%
+██████████████████████████████░ 98%
 ```
 
-| Domain | Progress |
-|--------------------------|:---:|
+| Domain | Status |
+|-------------------------------|:---:|
 | Governance & IAM | ✅ |
 | Networking | ✅ |
 | Compute | ✅ |
-| Storage | ✅ |
-| Database Services | 🟡 |
+| Storage Fundamentals | ✅ |
+| Autonomous Database | ✅ |
+| Enterprise Web Application | ✅ |
 | Monitoring | ✅ |
 | Cost Management | ✅ |
-| Documentation | ✅ |
 | Practice Exams | 🟡 |
-| Certification | ⏳ |
+| OCI Foundations Certification | ⏳ |
 
 ---
 
 # 🏛️ High-Level Architecture
 
 ```text
-                     Internet
-                         │
-                 Internet Gateway
-                         │
-          ┌──────── Public Subnet ────────┐
-          │                               │
-     Oracle Linux VM                 Future LB
-          │
-     Apache Web Server
-          │
-      Object Storage
+                          Internet
+                              │
+                       Internet Gateway
+                              │
+                    OCI Public Subnet
+                              │
+                      GnSys-VM-WEB-01
+                    Oracle Linux 9.8
+                              │
+                      Apache HTTP Server
+                              │
+                       Reverse Proxy
+                              │
+                        Flask Application
+                              │
+                     python-oracledb Driver
+                              │
+                        Oracle Wallet
+                              │
+          Oracle Autonomous Database 26ai (Always Free)
+                              │
+                      GNSYS_APP Schema
+                              │
+                  APPLICATION_INFO Table
 
-         VCN (Enterprise Design)
+                     Planned Next Phase
+              ├── Object Storage
+              ├── Second VM (AD-2)
+              ├── Manual Synchronization
+              └── Load Balancer
 ```
-
-*A graphical architecture diagram will be maintained under `/diagrams`.*
 
 ---
 
@@ -105,7 +121,7 @@ labs/
 diagrams/
 screenshots/
 scripts/
-terraform/ (future)
+terraform/        (future)
 ```
 
 ---
@@ -113,43 +129,83 @@ terraform/ (future)
 # 🧪 Completed Labs
 
 ## Governance
+
 - ✅ Compartments
 - ✅ IAM Policies
-- ✅ Tags
+- ✅ Resource Tags
 
 ## Networking
-- ✅ VCN
+
+- ✅ Virtual Cloud Network (VCN)
 - ✅ Public Subnet
 - ✅ Internet Gateway
 - ✅ NAT Gateway
 - ✅ Service Gateway
 - ✅ Route Tables
 - ✅ Security Lists
-- ✅ Network Security Groups
+- ✅ Network Security Groups (NSG)
 
 ## Compute
-- ✅ Oracle Linux VM
-- ✅ SSH Authentication
-- ✅ Apache Deployment
 
-## Storage
-- ✅ Object Storage Fundamentals
-- ✅ Block Volume Fundamentals
+- ✅ Oracle Linux Virtual Machine
+- ✅ SSH Key Authentication
+- ✅ Apache HTTP Server
+- ✅ Reverse Proxy Configuration
+- ✅ systemd Service Management
+
+## Database
+
+- ✅ Oracle Autonomous Database 26ai
+- ✅ Wallet Configuration
+- ✅ python-oracledb Driver
+- ✅ Dedicated Application Schema
+- ✅ Database Connectivity Validation
+
+## Application
+
+- ✅ Python Virtual Environment
+- ✅ Flask Web Application
+- ✅ Runtime Environment Variables
+- ✅ Application Configuration Table
+- ✅ Dynamic Configuration Loading
+- ✅ Database Health Detection
+- ✅ Graceful Database Failure Handling
 
 ## Observability
+
 - ✅ Monitoring Overview
 - ✅ Notifications
-- ✅ Cost Management
+- ✅ Cost Analysis
+
+---
+
+# 💼 Enterprise Features
+
+The current implementation already includes several enterprise-grade practices.
+
+- ✅ Apache Reverse Proxy
+- ✅ Flask Application Server
+- ✅ Oracle Wallet Authentication
+- ✅ python-oracledb Thin Driver
+- ✅ Dedicated Application Database User
+- ✅ Environment Variable Configuration
+- ✅ systemd Service
+- ✅ Application Health Indicator
+- ✅ Database Health Indicator
+- ✅ Graceful Degradation when Database is Offline
+- ✅ Separation between Infrastructure and Application Configuration
 
 ---
 
 # 🧭 Engineering Standards
 
-- Consistent naming convention
-- Tagging strategy
-- Documentation-first workflow
-- Architecture Decision Records (ADRs)
-- Reproducible labs
+- Documentation First
+- Consistent Naming Convention
+- Tagging Strategy
+- Infrastructure Documentation
+- Architecture Decision Records (ADR)
+- Reproducible Labs
+- Enterprise Naming Standards
 
 ---
 
@@ -159,15 +215,15 @@ terraform/ (future)
 |-----|-------------|:-----:|
 | ADR-0001 | Documentation First | ✅ |
 | ADR-0002 | Naming Standards | ✅ |
-| ADR-0003 | NSG over Security Lists | ✅ |
+| ADR-0003 | Network Security Groups over Security Lists | ✅ |
 
 ---
 
 # 📸 Screenshots
 
-Each completed lab includes screenshots showing the deployed OCI resources.
+Every completed lab contains screenshots documenting deployed OCI resources and application behavior.
 
-```
+```text
 screenshots/
 ```
 
@@ -177,42 +233,70 @@ screenshots/
 
 ## Phase 1 — OCI Foundations
 
-- ✅ Core Services
+- ✅ Governance
 - ✅ Networking
 - ✅ Compute
-- ✅ Storage
-- 🟡 Database Review
+- ✅ Storage Fundamentals
+- ✅ Autonomous Database
+- ✅ Enterprise Web Application
 - 🟡 Practice Exams
-- ⏳ Certification Exam
+- ⏳ OCI Foundations Certification
 
-## Phase 2 — OCI AI Foundations
+---
 
-- ⏳ AI Services
-- ⏳ Generative AI
-- ⏳ Vector Search
+## Phase 2 — Enterprise Cloud Labs
+
+- ⏳ Object Storage Integration
+- ⏳ Read Application Assets from Bucket
+- ⏳ Second Compute Instance (Availability Domain)
+- ⏳ Manual Synchronization between Servers
+- ⏳ Load Balancer
+- ⏳ Health Checks
+- ⏳ High Availability Simulation
+
+---
 
 ## Phase 3 — Professional OCI
 
 - ⏳ Terraform
-- ⏳ DevOps
-- ⏳ OKE
-- ⏳ High Availability
+- ⏳ OCI DevOps
+- ⏳ Oracle Kubernetes Engine (OKE)
+- ⏳ Monitoring & Logging
 - ⏳ Disaster Recovery
+- ⏳ Infrastructure as Code
+
+---
+
+# 🎯 Current Application Capabilities
+
+Current application demonstrates:
+
+- Enterprise deployment on Oracle Linux
+- Apache acting as Reverse Proxy
+- Flask backend
+- Oracle Autonomous Database integration
+- Oracle Wallet authentication
+- Dedicated application schema
+- Runtime configuration
+- Database connectivity monitoring
+- Automatic detection of database outages
+- Graceful degradation while keeping the web application available
 
 ---
 
 # 📚 References
 
-- Oracle Cloud Documentation
+- Oracle Cloud Infrastructure Documentation
 - Oracle University
-- OCI Architecture Center
+- Oracle Architecture Center
 
 ---
 
 # 🤝 Contributing
 
 This repository is maintained as a personal learning and portfolio project.
-Suggestions and discussions are always welcome.
+
+Suggestions, discussions, and architectural feedback are always welcome.
 
 ---
 
@@ -228,7 +312,7 @@ Costa Rica
 
 Technical implementation by the author.
 
-Documentation, reviews, study guidance, and architectural discussions were developed with assistance from ChatGPT (OpenAI).
+Architecture reviews, engineering discussions, documentation improvements, study planning, and technical mentoring were developed with assistance from ChatGPT (OpenAI).
 
 ---
 

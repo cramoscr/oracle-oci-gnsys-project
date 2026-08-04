@@ -5,58 +5,111 @@
 | Epic | 01 |
 | Status | In Progress |
 | Project | GnSyS |
-| Objective | Build an enterprise-style web application on Oracle Cloud Infrastructure |
+| Objective | Build a production-style enterprise web application on Oracle Cloud Infrastructure |
 
 ---
 
-# Epic Goal
+# Vision
 
-Build and evolve a functional web application running on Oracle Cloud Infrastructure.
+Design, build and evolve an enterprise-style cloud application using Oracle Cloud Infrastructure Always Free resources.
 
-The application will integrate compute, networking, database, storage, security, and application services while following documented engineering standards.
-
----
-
-# Scope
-
-This epic includes:
-
-- OCI networking and compute infrastructure
-- Oracle Linux virtual machine
-- Apache HTTP Server
-- Flask web application
-- systemd service management
-- Oracle Autonomous Database
-- OCI Object Storage
-- Application health indicators
-- Graceful dependency failure handling
+This epic focuses on establishing a complete application stack while applying engineering best practices, documentation standards and production-inspired architecture.
 
 ---
 
-# Sprints
+# Business Objective
 
-| Sprint | Objective | Status |
-|--------|-----------|:------:|
-| Sprint 01 | OCI Foundations and Enterprise Web Application | ✅ |
+Transform the project from an infrastructure learning repository into a fully functional cloud application demonstrating:
+
+- Cloud Networking
+- Compute
+- Web Services
+- Database Integration
+- Cloud Storage
+- Operational Resilience
+
+---
+
+# Epic Roadmap
+
+| Sprint | Name | Status |
+|---------|-------------------------------|:------:|
+| Sprint 01 | OCI Foundations & Enterprise Web Application | ✅ |
 | Sprint 02 | Object Storage Integration | 🚧 |
 
 ---
 
-# Current Architecture
+# Architecture Evolution
 
-```text
-                        Internet
-                            │
-                     Internet Gateway
-                            │
-                    OCI Public Subnet
-                            │
-                    VM-GnSyS-WEB-01
-                            │
-                 Apache Reverse Proxy
-                            │
-                    Flask Application
-                     ┌──────┴──────┐
-                     │             │
-                     ▼             ▼
-          Autonomous Database   Object Storage
+## Sprint 01
+
+```
+Internet
+    │
+Apache
+    │
+Flask
+    │
+Oracle Autonomous Database
+```
+
+---
+
+## Sprint 02 (Current)
+
+```
+Internet
+    │
+Apache
+    │
+Flask
+ ┌──┴─────────────┐
+ │                │
+ ▼                ▼
+ADB       Object Storage
+```
+
+---
+
+## Future
+
+```
+                 Internet
+                     │
+              OCI Load Balancer
+                     │
+          ┌──────────┴──────────┐
+          │                     │
+          ▼                     ▼
+   VM-GnSyS-WEB-01      VM-GnSyS-WEB-02
+          │                     │
+          └──────────┬──────────┘
+                     ▼
+            Oracle Autonomous DB
+
+               Object Storage
+```
+
+---
+
+# Deliverables
+
+- Enterprise OCI networking
+- Apache Reverse Proxy
+- Flask Web Application
+- Oracle Autonomous Database
+- OCI Object Storage
+- Runtime Configuration
+- High Availability (future)
+
+---
+
+# Success Criteria
+
+Epic 01 will be complete when:
+
+- The application is fully operational.
+- Application data resides in Oracle Autonomous Database.
+- Static assets and documents reside in Object Storage.
+- The application gracefully handles service outages.
+- Documentation is complete.

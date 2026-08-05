@@ -1,4 +1,4 @@
-# Sprint 02 — Object Storage Integration
+# Sprint 03 — Object Storage Integration
 
 | Property | Value |
 |----------|-------|

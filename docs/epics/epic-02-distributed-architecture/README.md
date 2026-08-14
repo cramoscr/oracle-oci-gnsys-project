@@ -3,27 +3,17 @@
 | Property | Value |
 |----------|-------|
 | Epic | 02 |
-| Status | Planned |
-| Project | GnSyS |
+| Status | In Progress |
+| Project | GnSys |
 | Objective | Transform the application into a resilient multi-server cloud solution |
 
 ---
 
 # Vision
 
-The current application runs on a single virtual machine.
+Epic 02 evolves GnSys from a single-server application into a distributed OCI architecture with multiple application servers and load-balanced HTTP traffic.
 
-This epic introduces a distributed architecture by deploying multiple application servers across different Availability Domains, improving scalability, resilience, and availability.
-
-The implementation intentionally follows a progressive engineering approach, introducing each component separately to understand its purpose before moving to the next layer.
-
----
-
-# Business Motivation
-
-A single server represents a Single Point of Failure (SPOF).
-
-This epic eliminates that limitation by introducing redundancy and preparing the environment for High Availability.
+The implementation follows a progressive engineering approach so that each infrastructure component can be deployed, tested, and understood independently.
 
 ---
 
@@ -31,96 +21,108 @@ This epic eliminates that limitation by introducing redundancy and preparing the
 
 ## Before
 
+```text
+Internet
+   │
+GnSys-VM-WEB-01
+   │
+Apache Reverse Proxy
+   │
+Flask Application
+   │
+Oracle Autonomous Database
 ```
-                Internet
-                    │
-                Apache
-                    │
-                VM-GnSyS-WEB-01
-                    │
-      ┌─────────────┴─────────────┐
-      ▼                           ▼
-Autonomous Database        Object Storage
+
+## Current Architecture
+
+```text
+                         Internet
+                            │
+                    OCI Load Balancer
+                            │
+                 ┌──────────┴──────────┐
+                 │                     │
+                 ▼                     ▼
+        GnSys-VM-WEB-01       GnSys-VM-WEB-02
+                 │                     │
+                 ▼                     ▼
+        Apache / Flask         Apache / Flask
+                 │                     │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                Oracle Autonomous Database
 ```
+
+The Load Balancer distributes requests between both web servers. Browser refresh testing confirmed that requests can be served by VM-WEB-01 and VM-WEB-02.
 
 ---
 
-## Target Architecture
+# Implementation Status
 
-```
-                     Internet
-                         │
-                 OCI Load Balancer
-                         │
-            ┌────────────┴────────────┐
-            │                         │
-            ▼                         ▼
-    VM-GnSyS-WEB-01          VM-GnSyS-WEB-02
-            │                         │
-            └────────────┬────────────┘
-                         ▼
-             Oracle Autonomous Database
-
-                  Object Storage
-```
+| Capability | Status |
+|------------|:------:|
+| Second Compute Instance | ✅ |
+| Multi-server application deployment | ✅ |
+| Application synchronization | ✅ |
+| Load Balancer | ✅ |
+| Backend health checks | ✅ |
+| Traffic distribution validation | ✅ |
+| Failure simulation / HA validation | ⏳ |
+| Object Storage integration | ⏳ |
 
 ---
 
-# Planned Sprints
-
-| Sprint | Objective | Status |
-|---------|-----------|:------:|
-| Sprint 03 | Multi-Server Deployment | ⏳ |
-| Sprint 04 | High Availability | ⏳ |
-
----
-
-# Planned User Stories
+# User Stories
 
 ## US-301 — Second Compute Instance
 
-Deploy a second application server in another Availability Domain.
+Deploy a second application server to introduce compute redundancy.
 
----
+**Status:** ✅ Completed
 
 ## US-302 — Application Synchronization
 
-Synchronize application code and configuration between servers.
+Deploy the same application configuration to both web servers.
 
----
+**Status:** ✅ Completed
 
-## US-303 — Shared Storage Strategy
+## US-303 — Shared Cloud Resources
 
-Ensure both servers consume the same cloud resources.
+Allow both application servers to consume common OCI services such as Autonomous Database.
 
----
+**Status:** 🚧 In Progress
 
 ## US-304 — Health Checks
 
-Implement application health endpoints.
+Configure health checks so that unhealthy backends can be detected by the Load Balancer.
 
----
+**Status:** ✅ Completed
 
 ## US-305 — Load Balancer
 
-Distribute incoming traffic across multiple servers.
+Distribute incoming HTTP traffic across both application servers.
 
----
+**Status:** ✅ Completed
 
 ## US-306 — Failure Simulation
 
-Validate that the application continues operating after losing one server.
+Validate application availability when one backend server becomes unavailable.
+
+**Status:** ⏳ Pending
 
 ---
 
 # Deliverables
 
-- Multi-server deployment
-- Cross-Availability Domain architecture
-- Manual synchronization
-- Health checks
-- OCI Load Balancer
-- Basic High Availability
+- ✅ Multi-server deployment
+- ✅ Two application backends
+- ✅ Manual application synchronization
+- ✅ OCI Load Balancer
+- ✅ Backend health checks
+- ✅ Traffic distribution validation
+- ⏳ Failure simulation and HA validation
+- ⏳ Object Storage integration
 
 ---
 
@@ -128,17 +130,17 @@ Validate that the application continues operating after losing one server.
 
 Epic 02 will be considered complete when:
 
-- Two application servers are operational.
-- Both servers serve the same application version.
-- Object Storage and Autonomous Database are shared.
-- Traffic is distributed through OCI Load Balancer.
-- The application remains available after shutting down one server.
+- Two application servers are operational. ✅
+- Both servers serve the same application version. ✅
+- Traffic is distributed through OCI Load Balancer. ✅
+- Load Balancer health checks validate backend availability. ✅
+- Shared application resources are documented and validated. 🚧
+- The application remains available after intentionally removing one server. ⏳
 
 ---
 
-# Success Criteria
+# Current Result
 
-- No single application server is a single point of failure.
-- Deployment process is documented.
-- Architecture diagrams are updated.
-- GitHub documentation reflects the new topology.
+GnSys now demonstrates a real multi-server OCI deployment rather than a single-instance application.
+
+The remaining work for this epic is controlled backend failure testing and completion of the remaining shared-resource work.

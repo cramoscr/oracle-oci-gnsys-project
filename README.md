@@ -7,7 +7,7 @@
 ![OCI](https://img.shields.io/badge/Learning-OCI%20Foundations-orange)
 ![Progress](https://img.shields.io/badge/Progress-98%25-brightgreen)
 ![Application](https://img.shields.io/badge/Application-ONLINE-success)
-![Database](https://img.shields.io/badge/Database-Health%20Monitoring-blue)
+![Architecture](https://img.shields.io/badge/Architecture-Load%20Balanced-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 </p>
@@ -16,24 +16,9 @@
 
 > **"Build first. Document always. Understand everything."**
 
-Project **GnSys** is an enterprise-style Oracle Cloud Infrastructure learning repository documenting every lab, architectural decision, and lesson learned while building a production-style cloud application from scratch using Oracle Cloud Infrastructure Always Free resources.
+Project **GnSys** is an enterprise-style Oracle Cloud Infrastructure learning repository documenting hands-on labs, architectural decisions, and lessons learned while building a production-style cloud application from scratch using Oracle Cloud Infrastructure Always Free resources.
 
 Unlike repositories that simply collect notes, this project follows engineering practices used in real enterprise environments.
-
----
-
-# 📑 Table of Contents
-
-- Project Overview
-- Learning Dashboard
-- High-Level Architecture
-- Repository Structure
-- Completed Labs
-- Enterprise Features
-- Architecture Decision Records
-- Learning Roadmap
-- Future Enhancements
-- References
 
 ---
 
@@ -42,7 +27,7 @@ Unlike repositories that simply collect notes, this project follows engineering 
 - Learn Oracle Cloud Infrastructure through hands-on implementation
 - Build a complete cloud-hosted enterprise application
 - Understand enterprise architecture patterns
-- Document every engineering decision
+- Document engineering decisions
 - Create a professional cloud engineering portfolio
 - Prepare for Oracle OCI certifications
 
@@ -64,6 +49,8 @@ Overall Progress
 | Storage Fundamentals | ✅ |
 | Autonomous Database | ✅ |
 | Enterprise Web Application | ✅ |
+| Distributed Web Architecture | ✅ |
+| Load Balancing | ✅ |
 | Monitoring | ✅ |
 | Cost Management | ✅ |
 | Practice Exams | 🟡 |
@@ -74,59 +61,57 @@ Overall Progress
 # 🏛️ High-Level Architecture
 
 ```text
-                          Internet
-                              │
-                       Internet Gateway
-                              │
-                    OCI Public Subnet
-                              │
-                      GnSys-VM-WEB-01
-                    Oracle Linux 9.8
-                              │
-                      Apache HTTP Server
-                              │
-                       Reverse Proxy
-                              │
-                        Flask Application
-                              │
-                     python-oracledb Driver
-                              │
-                        Oracle Wallet
-                              │
-          Oracle Autonomous Database 26ai (Always Free)
-                              │
-                      GNSYS_APP Schema
-                              │
-                  APPLICATION_INFO Table
-
-                     Planned Next Phase
-              ├── Object Storage
-              ├── Second VM (AD-2)
-              ├── Manual Synchronization
-              └── Load Balancer
+                              Internet
+                                  │
+                           Internet Gateway
+                                  │
+                           OCI Load Balancer
+                                  │
+                     ┌────────────┴────────────┐
+                     │                         │
+                     ▼                         ▼
+             GnSys-VM-WEB-01          GnSys-VM-WEB-02
+             Oracle Linux 9.8          Oracle Linux 9.8
+                     │                         │
+                Apache HTTP               Apache HTTP
+                Reverse Proxy             Reverse Proxy
+                     │                         │
+                Flask App                  Flask App
+                     │                         │
+                     └────────────┬────────────┘
+                                  │
+                         python-oracledb
+                                  │
+                            Oracle Wallet
+                                  │
+                Oracle Autonomous Database 26ai
+                                  │
+                           GNSYS_APP Schema
 ```
+
+The OCI Load Balancer distributes HTTP requests across both web application backends. Testing confirmed that browser requests can be served by either VM-WEB-01 or VM-WEB-02.
 
 ---
 
 # 📂 Repository Structure
 
 ```text
+README.md
 docs/
  ├── architecture/
- ├── decisions/
- ├── roadmap/
- ├── standards/
-
-labs/
-diagrams/
-screenshots/
-scripts/
-terraform/        (future)
+ │    ├── decision-records/
+ │    └── project_charter.md
+ ├── epics/
+ │    ├── epic-01-enterprise-web-application/
+ │    ├── epic-02-distributed-architecture/
+ │    └── epic-03-cloud-automation/
+ ├── project/
+ └── standards/
 ```
 
 ---
 
-# 🧪 Completed Labs
+# 🧪 Completed Labs and Capabilities
 
 ## Governance
 
@@ -145,13 +130,15 @@ terraform/        (future)
 - ✅ Security Lists
 - ✅ Network Security Groups (NSG)
 
-## Compute
+## Compute & Web Tier
 
-- ✅ Oracle Linux Virtual Machine
+- ✅ Two Oracle Linux Virtual Machines
 - ✅ SSH Key Authentication
 - ✅ Apache HTTP Server
 - ✅ Reverse Proxy Configuration
+- ✅ Flask Application
 - ✅ systemd Service Management
+- ✅ Manual application synchronization
 
 ## Database
 
@@ -161,17 +148,15 @@ terraform/        (future)
 - ✅ Dedicated Application Schema
 - ✅ Database Connectivity Validation
 
-## Application
+## High Availability Foundations
 
-- ✅ Python Virtual Environment
-- ✅ Flask Web Application
-- ✅ Runtime Environment Variables
-- ✅ Application Configuration Table
-- ✅ Dynamic Configuration Loading
-- ✅ Database Health Detection
-- ✅ Graceful Database Failure Handling
+- ✅ OCI Load Balancer
+- ✅ Two application backends
+- ✅ Backend health checks
+- ✅ HTTP traffic distribution validation
+- ⏳ Controlled backend failure simulation
 
-## Observability
+## Observability & Cost
 
 - ✅ Monitoring Overview
 - ✅ Notifications
@@ -180,8 +165,6 @@ terraform/        (future)
 ---
 
 # 💼 Enterprise Features
-
-The current implementation already includes several enterprise-grade practices.
 
 - ✅ Apache Reverse Proxy
 - ✅ Flask Application Server
@@ -192,7 +175,10 @@ The current implementation already includes several enterprise-grade practices.
 - ✅ systemd Service
 - ✅ Application Health Indicator
 - ✅ Database Health Indicator
-- ✅ Graceful Degradation when Database is Offline
+- ✅ Graceful Database Failure Handling
+- ✅ Multi-server application deployment
+- ✅ OCI Load Balancer
+- ✅ Backend health monitoring
 - ✅ Separation between Infrastructure and Application Configuration
 
 ---
@@ -219,16 +205,6 @@ The current implementation already includes several enterprise-grade practices.
 
 ---
 
-# 📸 Screenshots
-
-Every completed lab contains screenshots documenting deployed OCI resources and application behavior.
-
-```text
-screenshots/
-```
-
----
-
 # 🛣️ Learning Roadmap
 
 ## Phase 1 — OCI Foundations
@@ -242,26 +218,22 @@ screenshots/
 - 🟡 Practice Exams
 - ⏳ OCI Foundations Certification
 
----
+## Phase 2 — Distributed Cloud Architecture
 
-## Phase 2 — Enterprise Cloud Labs
-
+- ✅ Second Compute Instance
+- ✅ Manual Synchronization between Servers
+- ✅ Load Balancer
+- ✅ Health Checks
+- ✅ Traffic Distribution
+- ⏳ High Availability Failure Simulation
 - ⏳ Object Storage Integration
-- ⏳ Read Application Assets from Bucket
-- ⏳ Second Compute Instance (Availability Domain)
-- ⏳ Manual Synchronization between Servers
-- ⏳ Load Balancer
-- ⏳ Health Checks
-- ⏳ High Availability Simulation
-
----
 
 ## Phase 3 — Professional OCI
 
 - ⏳ Terraform
 - ⏳ OCI DevOps
 - ⏳ Oracle Kubernetes Engine (OKE)
-- ⏳ Monitoring & Logging
+- ⏳ Advanced Monitoring & Logging
 - ⏳ Disaster Recovery
 - ⏳ Infrastructure as Code
 
@@ -269,18 +241,20 @@ screenshots/
 
 # 🎯 Current Application Capabilities
 
-Current application demonstrates:
+GnSys currently demonstrates:
 
 - Enterprise deployment on Oracle Linux
+- Two web application servers
 - Apache acting as Reverse Proxy
 - Flask backend
+- OCI Load Balancer distributing HTTP traffic
+- Backend health checks
 - Oracle Autonomous Database integration
 - Oracle Wallet authentication
 - Dedicated application schema
 - Runtime configuration
 - Database connectivity monitoring
-- Automatic detection of database outages
-- Graceful degradation while keeping the web application available
+- Graceful degradation when the database is unavailable
 
 ---
 

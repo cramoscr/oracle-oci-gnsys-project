@@ -166,7 +166,7 @@ docs/
 - ✅ Two application backends
 - ✅ Backend health checks
 - ✅ HTTP traffic distribution validation
-- ⏳ Controlled backend failure simulation
+- ✅ Controlled backend failure simulation
 
 ## Observability & Cost
 
@@ -237,8 +237,8 @@ docs/
 - ✅ Load Balancer
 - ✅ Health Checks
 - ✅ Traffic Distribution
-- ⏳ High Availability Failure Simulation
-- ⏳ Object Storage Integration
+- ✅ High Availability Failure Simulation
+- ✅ Object Storage Integration
 
 ## Phase 3 — Professional OCI
 

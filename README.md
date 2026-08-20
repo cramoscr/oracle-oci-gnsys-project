@@ -4,8 +4,8 @@
 <p align="center">
 
 ![Oracle Cloud](https://img.shields.io/badge/Oracle-Cloud-red)
-![OCI](https://img.shields.io/badge/Learning-OCI%20Foundations-orange)
-![Progress](https://img.shields.io/badge/Progress-98%25-brightgreen)
+![OCI](https://img.shields.io/badge/OCI-Foundations%20Certified-brightgreen)
+![Progress](https://img.shields.io/badge/Progress-100%25-brightgreen)
 ![Application](https://img.shields.io/badge/Application-ONLINE-success)
 ![Architecture](https://img.shields.io/badge/Architecture-Load%20Balanced-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -33,12 +33,24 @@ Unlike repositories that simply collect notes, this project follows engineering 
 
 ---
 
+# 🏆 Certification Milestone
+
+On **August 20, 2026**, the project reached its original certification goal:
+
+- ✅ **Oracle Cloud Infrastructure Certified Foundations Associate**
+- ✅ Exam: **1Z0-1085-26 — Oracle Cloud Infrastructure Foundations Associate**
+- ✅ Certification earned after completing the GnSys hands-on learning path, focused conceptual review, and Oracle practice-exam preparation
+
+This milestone validates the OCI fundamentals exercised throughout the project, including governance and IAM, networking, compute, storage, security, cost management, and core OCI architecture concepts.
+
+---
+
 # 📊 Learning Dashboard
 
 ```text
 Overall Progress
 
-██████████████████████████████░ 98%
+██████████████████████████████ 100%
 ```
 
 | Domain | Status |
@@ -53,8 +65,8 @@ Overall Progress
 | Load Balancing | ✅ |
 | Monitoring | ✅ |
 | Cost Management | ✅ |
-| Practice Exams | 🟡 |
-| OCI Foundations Certification | ⏳ |
+| Practice Exams | ✅ |
+| OCI Foundations Certification | ✅ |
 
 ---
 
@@ -215,8 +227,8 @@ docs/
 - ✅ Storage Fundamentals
 - ✅ Autonomous Database
 - ✅ Enterprise Web Application
-- 🟡 Practice Exams
-- ⏳ OCI Foundations Certification
+- ✅ Practice Exams
+- ✅ OCI Foundations Certification
 
 ## Phase 2 — Distributed Cloud Architecture
 

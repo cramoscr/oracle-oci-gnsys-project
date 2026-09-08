@@ -36,6 +36,10 @@ Internet
 `GnSys-VM-APP-01` remains in the private subnet:
 
 - VM: `GnSys-VM-APP-01`
+- Shape: `VM.Standard.A1.Flex`
+- Architecture: ARM64 / Ampere A1
+- OCPU: 1
+- Memory: 6 GB allocated (approximately 5.5 GiB visible to Linux)
 - Private IPv4: `10.0.2.86`
 - Public IPv4: none
 - Subnet: `GnSys-SNET-PRV-01`
@@ -158,6 +162,64 @@ This provides a useful troubleshooting pattern:
 5. Verify the target operating system SSH service and firewall if network rules are correct.
 6. Only then troubleshoot SSH user/key authentication.
 
+## Pre-desktop recovery checkpoint
+
+Before installing a graphical desktop, XRDP, development tools, or otherwise repurposing `GnSys-VM-APP-01`, a recoverable OCI Custom Image was created.
+
+```text
+Custom image:
+GnSys-VM-APP-01-PRE-DESKTOP-2026-09-08
+
+Status at validation:
+Available
+
+Original image family:
+Oracle Linux 9.8 aarch64
+```
+
+The VM was stopped before image creation to favor a consistent filesystem state.
+
+This image represents the known-good pre-workstation baseline:
+
+```text
+GnSys-VM-APP-01
+      |
+      +-- Oracle Linux 9.8 / ARM64
+      +-- 1 OCPU / 6 GB RAM
+      +-- private subnet
+      +-- NAT outbound connectivity
+      +-- OCI Bastion SSH access validated
+      +-- no graphical desktop installed
+      |
+      +--> PRE-DESKTOP CUSTOM IMAGE
+```
+
+If the workstation experiment causes an unrecoverable configuration problem, a replacement VM can be created from this image rather than attempting to reverse every package or configuration change manually.
+
+The image is a recovery checkpoint, not a substitute for backing up application data that may be created after the checkpoint.
+
+## Workstation feasibility discovery
+
+Before changing the VM, the Oracle Linux Developer EPEL repository for aarch64 was enabled and package availability was verified.
+
+Native ARM64 packages were found for the proposed lightweight graphical stack, including:
+
+- XFCE components
+- `xrdp.aarch64`
+- `xorgxrdp.aarch64`
+- `xrdp-selinux.aarch64`
+
+At the pre-desktop checkpoint, Linux reported approximately:
+
+- 5.5 GiB RAM total
+- 4.8 GiB RAM available
+- 4 GiB swap
+- 30 GB root filesystem
+- approximately 20 GB free on `/`
+- default boot target: `multi-user.target`
+
+The primary expected performance constraint for desktop use is the single OCPU rather than memory.
+
 ## Architectural decision
 
 `GnSys-VM-APP-01` will remain private.
@@ -173,4 +235,6 @@ OCI Bastion provides the cleaner separation of responsibilities while retaining 
 
 ## Potential new role
 
-`GnSys-VM-APP-01` is being evaluated as the isolated development/research host for the Material APEX Revival experiment. Before assigning that role permanently, its compute, memory, storage, current services, and outbound Internet connectivity should be inventoried and validated.
+`GnSys-VM-APP-01` is being evaluated as a private cloud development workstation and isolated development/research host for the Material APEX Revival experiment.
+
+The intended experiment is to add a lightweight graphical environment and development tooling while preserving the private-network architecture. The pre-desktop custom image provides the rollback boundary before those changes begin.

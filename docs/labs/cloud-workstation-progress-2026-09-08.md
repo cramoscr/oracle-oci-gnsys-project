@@ -1,13 +1,13 @@
 # GnSys Cloud Workstation — Progress Log
 
 **Date:** 2026-09-08  
-**Status:** PAUSED — safe continuation point
+**Status:** EXPERIMENT CONCLUDED — technically feasible, operationally rejected
 
 ## Objective
 
 Evaluate whether `GnSys-VM-APP-01` can become a personal cloud development workstation so development environments, source code, agents, and tools do not need to reside on the local work computer.
 
-The first experiment deliberately uses a conventional lightweight Linux desktop (`XFCE + XRDP`). A later architecture review will compare this approach with Cloud Development Environment alternatives such as Coder and browser-based VS Code solutions.
+The first experiment deliberately used a conventional lightweight Linux desktop (`XFCE + XRDP`). The experiment produced enough evidence to make an architectural decision: the approach is technically feasible, but it introduces too much operational friction for a daily personal development environment.
 
 ## VM baseline
 
@@ -29,7 +29,7 @@ Observed baseline memory usage was approximately 708 MiB, leaving ~4.8 GiB avail
 
 ## Network / administrative access
 
-The VM remains private.
+The VM remained private throughout the experiment.
 
 ```text
 Administrator workstation
@@ -39,7 +39,6 @@ Administrator workstation
 OCI Bastion
 10.0.2.132
         |
-        | TCP/22
         v
 GnSys-VM-APP-01
 10.0.2.86
@@ -49,7 +48,7 @@ GnSys-VM-APP-01
 NAT Gateway -> Internet
 ```
 
-SSH access through OCI Bastion was validated successfully before the workstation experiment.
+SSH access through OCI Bastion was validated successfully.
 
 ## Recovery checkpoint
 
@@ -59,21 +58,19 @@ Before installing the graphical stack, the VM was stopped and a Custom Image was
 GnSys-VM-APP-01-PRE-DESKTOP-2026-09-08
 ```
 
-Status was confirmed as `Available` before proceeding.
-
-This is the rollback boundary for the desktop experiment.
+Status was confirmed as `Available` before proceeding. This remains the rollback boundary for the desktop experiment.
 
 ## Repository preparation
 
 The Oracle Linux Developer EPEL repository (`ol9_developer_EPEL`) was enabled because the default Oracle Linux repositories did not expose XFCE or XRDP packages.
 
-Native ARM64 availability was then confirmed for both XFCE and XRDP.
+Native ARM64 availability was confirmed for both XFCE and XRDP.
 
 ## Installed graphical stack
 
-The lightweight XFCE/XRDP stack was installed successfully.
+The lightweight XFCE/XRDP stack installed successfully.
 
-Confirmed packages:
+Confirmed packages included:
 
 ```text
 xfce4-session-4.18.3-1.el9.aarch64
@@ -85,14 +82,20 @@ xorgxrdp-0.10.5-1.el9.aarch64
 xrdp-selinux-0.10.6.1-3.el9.aarch64
 ```
 
-Additional XFCE components installed as part of the minimal desktop include settings, terminal, app finder, notification daemon, and PolicyKit integration.
+Additional XFCE components installed as part of the minimal desktop included settings, terminal, app finder, notification daemon, and PolicyKit integration.
 
-## XFCE session configuration
+## Dedicated development identity
 
-For the current `opc` user, the intended XRDP desktop command was configured through:
+A dedicated graphical development user was created:
 
 ```text
-~/.Xclients
+gnsys-dev
+```
+
+Its XFCE session command was configured through:
+
+```text
+/home/gnsys-dev/.Xclients
 ```
 
 with:
@@ -101,179 +104,163 @@ with:
 exec startxfce4
 ```
 
-The file was made executable.
+## XRDP validation
 
-## XRDP status
-
-XRDP was enabled and started successfully:
+XRDP and its session manager ran successfully:
 
 ```text
-xrdp.service
-Loaded: enabled
-Active: active (running)
+xrdp.service        active (running)
+xrdp-sesman         active (running)
+TCP/3389             listening
 ```
 
-XRDP reported:
+RDP was never exposed directly to the public Internet.
+
+Linux `firewalld` and the OCI NSG were configured to permit TCP/3389 only from the OCI Bastion private endpoint (`10.0.2.132/32`).
+
+An OCI Bastion port-forwarding session targeted:
 
 ```text
-address [0.0.0.0] port [3389]
-listening to port 3389 on 0.0.0.0
+10.0.2.86:3389
 ```
 
-Socket validation confirmed:
+A local high port was forwarded through Bastion and Windows Remote Desktop successfully reached the XRDP login screen.
 
-```text
-*:3389 LISTEN xrdp
-```
+## What worked
 
-Therefore, at the pause point:
-
-- XFCE is installed: YES
-- XRDP is installed: YES
-- XRDP service is running: YES
-- TCP/3389 is listening locally: YES
-- External/public TCP/3389 exposure: NO
-- RDP through Bastion validated: NOT YET
-
-## Security principle
-
-Do **not** expose RDP directly to the Internet.
-
-Target design:
+The experiment validated the entire access chain:
 
 ```text
 Windows Remote Desktop
         |
-        | localhost:<local-port>
+        | local forwarded port
         v
-SSH tunnel / OCI Bastion
-        |
-        | TCP/3389
-        v
-GnSys-VM-APP-01
+SSH tunnel
         |
         v
-XRDP -> XFCE
+OCI Bastion
+        |
+        v
+APP-01:3389
+        |
+        v
+XRDP
+        |
+        v
+Xorg
+        |
+        v
+XFCE session
 ```
 
-The application VM should continue to have no public IP.
+XRDP logs confirmed successful authentication for `gnsys-dev`, session creation on display `:10`, Xorg startup, and channel connection.
 
-## Exact continuation point
+Process inspection confirmed that the XFCE desktop stack was actually running, including:
 
-The next session should resume here rather than repeat installation.
+- `xfce4-session`
+- `xfwm4`
+- `xfsettingsd`
+- `xfce4-panel`
+- `xfdesktop`
+- `xfce4-notifyd`
 
-### 1. Validate XRDP session manager
+Therefore the experiment progressed substantially beyond simple network connectivity: the graphical Linux session itself was alive.
 
-```bash
-systemctl status xrdp-sesman --no-pager
-```
+## Remaining graphical issue
 
-Expected: `active (running)`.
+Despite successful authentication, Xorg startup, and XFCE processes running, the RDP client displayed only a blue background rather than a usable desktop.
 
-### 2. Create a dedicated graphical development user
+Logs contained non-fatal XFCE warnings (missing Thunar and optional panel plugins) plus indications worth investigating in XRDP's graphics path, including GFX/H.264 negotiation and repeated `encoder is nil` messages.
 
-Recommended instead of using `opc` as the permanent desktop identity:
+At this point the remaining problem appeared to be in the remote graphics/rendering path rather than OCI networking, Bastion, authentication, Xorg, or basic XFCE startup.
 
-```bash
-sudo useradd -m -s /bin/bash dev
-sudo passwd dev
-```
+## Architectural finding
 
-Do not store the password in Git.
+The remaining rendering problem was deliberately **not** pursued further.
 
-Configure XFCE for that user:
+The reason is more important than the individual XRDP bug: by this stage, the operational workflow itself had demonstrated excessive complexity for the actual requirement.
 
-```bash
-sudo bash -c 'echo "exec startxfce4" > /home/dev/.Xclients'
-sudo chmod +x /home/dev/.Xclients
-sudo chown dev:dev /home/dev/.Xclients
-```
-
-### 3. Permit RDP only from the Bastion endpoint in Linux firewall
-
-Bastion private endpoint currently documented as `10.0.2.132`.
-
-Proposed rule:
-
-```bash
-sudo firewall-cmd --permanent \
-  --add-rich-rule='rule family="ipv4" source address="10.0.2.132/32" port protocol="tcp" port="3389" accept'
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-rich-rules
-```
-
-Before applying this in a future session, verify the Bastion private endpoint is still `10.0.2.132`.
-
-### 4. Add OCI NSG ingress rule
-
-On `GnSys-NSG-APP-01`, add a stateful ingress rule only for the Bastion endpoint:
+The daily path had become approximately:
 
 ```text
-Source type:       CIDR
-Source:            10.0.2.132/32
-Protocol:          TCP
-Destination port:  3389
-Description:       Allow RDP from GnSys Bastion
+Create/recreate temporary Bastion session
+        -> obtain session OCID / SSH command
+        -> maintain local SSH key and scripts
+        -> start SSH port-forward tunnel
+        -> start Windows Remote Desktop
+        -> authenticate to XRDP
+        -> maintain Linux desktop/Xorg/XRDP compatibility
 ```
 
-Do not create `0.0.0.0/0 -> 3389`.
+OCI Bastion session TTL also caused previously working local connection scripts to become invalid after the temporary session expired. This behavior is appropriate for controlled, temporary administrative access, but undesirable as the foundation for a daily personal workstation.
 
-### 5. Create OCI Bastion RDP port-forwarding session
+## Actual requirement discovered
 
-Suggested session:
+The experiment clarified that the real requirement is not simply:
+
+> Run a Linux GUI in OCI.
+
+The stronger requirement is:
+
+> Provide a personal development environment accessible from the work computer primarily through a browser, while minimizing or eliminating personal operational artifacts stored on that computer.
+
+Desired local footprint:
 
 ```text
-Name:        GnSys-APP-01-RDP
-Target IP:   10.0.2.86
-Target port: 3389
+Work computer
+    |
+    +-- Browser / HTTPS only (target)
+    |
+    X-- no personal SSH private/public keys
+    X-- no OCI connection CMD scripts
+    X-- no OCI CLI credentials
+    X-- no personal Git repositories
+    X-- no development toolchain
+    X-- no manually initiated SSH tunnels as the normal workflow
 ```
 
-Use an unprivileged local port such as `33389` when adapting the OCI-generated SSH tunnel command.
+This does not imply invisibility from corporate endpoint/network monitoring, and any use must remain compatible with employer policy. It means reducing persistent personal development artifacts and operational dependencies on the work machine.
 
-Conceptually:
+## Decision
 
-```text
-localhost:33389 -> OCI Bastion -> 10.0.2.86:3389
-```
+**XFCE + XRDP over OCI Bastion is technically feasible but rejected as the preferred daily-access architecture.**
 
-### 6. Test from Windows Remote Desktop
+OCI Bastion remains useful for temporary administrative access and recovery. It should not be the normal user-facing gateway to the personal cloud development environment.
 
-Launch:
+The VM itself remains valuable and can be reused for the next architecture experiment.
 
-```text
-mstsc
-```
+## Next architecture experiment
 
-and connect to:
+Evaluate purpose-built Cloud Development Environment approaches, prioritizing browser-first HTTPS access.
 
-```text
-localhost:33389
-```
+Candidates already identified:
 
-Authenticate using the dedicated graphical Linux user created above.
+1. Coder (self-hosted Cloud Development Environment)
+2. OpenVSCode Server / browser-hosted IDE approach
+3. DevPod, if its client-side operational model fits the local-footprint requirement
 
-## Definition of success for this experiment
+The next comparison should explicitly score:
 
-The experiment is complete when a usable XFCE desktop from `GnSys-VM-APP-01` is displayed through Windows Remote Desktop while:
+- browser-only daily access
+- local credential/key footprint
+- OCI ARM64 compatibility
+- installation/maintenance complexity
+- HTTPS and authentication model
+- GitHub integration
+- terminal access
+- Codex / AI-agent support
+- OpenSpec support
+- persistence and backup
+- performance on 1 OCPU / 6 GB
+- monthly cost
+- recovery/admin path
 
-1. APP-01 remains on the private subnet.
-2. APP-01 has no public IP.
-3. TCP/3389 is not exposed publicly.
-4. RDP traffic reaches APP-01 only through OCI Bastion.
-5. Basic desktop responsiveness on 1 OCPU / 6 GB RAM is measured qualitatively.
+## Historical note
 
-## Follow-up architecture decision — deliberately deferred
+This was a small engineering failure in the useful sense: a plausible architecture was implemented far enough to expose its real operational cost before more effort was invested in polishing it.
 
-Once the conventional desktop works, compare it against purpose-built Cloud Development Environment approaches rather than assuming a full remote desktop is the final design.
+Or, in the project's Costa Rican vocabulary:
 
-Candidates already identified for evaluation:
+> **Otra raya más que le sale al tigre.**
 
-- Coder (self-hosted CDE)
-- OpenVSCode Server / browser-hosted IDE approach
-- DevPod (development environments as code)
-
-Decision question:
-
-> Does the user actually need a remote desktop, or only a secure browser-accessible personal development environment?
-
-Do not mix this decision into completion of the current XFCE/XRDP experiment. Finish and benchmark the current experiment first, then compare alternatives.
+The wheel was made sufficiently round to discover that it was not the wheel we wanted to use.
